@@ -6,7 +6,10 @@ const router = express.Router()
 router.route('/')
     .get(notesController.getAllNotes)
     .post(notesController.createNewNote)
-    .put()
-    .delete()
+
+router.route('/:id')
+    .get(notesController.getNote)
+    .put(notesController.updateNote)
+    .delete(notesController.deleteNote)
 
 module.exports = router
