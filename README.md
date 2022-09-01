@@ -1,2 +1,2 @@
 # notes-antd-backend
-Backend of notes-antd project
+Backend rest api for notes-antd react project 

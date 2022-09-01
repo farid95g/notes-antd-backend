@@ -9,12 +9,7 @@ const asyncHandler = require('express-async-handler')
  */
 const getAllNotes = asyncHandler(async (req, res) => {
     const notes = await Note.find().lean()
-
-    if (!notes.length) {
-        return res.status(404).json({ message: 'No notes found!' })
-    }
-
-    res.json(notes)
+    return res.json(notes)
 })
 
 
