@@ -44,7 +44,7 @@ const createNewNote = asyncHandler(async (req, res) => {
     const note = await Note.findById(req.params.id).lean().exec()
 
     if (!note) {
-        return res.status(404).json({ message: `Note with id ${id} does not exist!` })
+        return res.status(404).json({ message: `Note with id ${req.params.id} does not exist!` })
     }
 
     res.json(note)
@@ -86,7 +86,7 @@ const deleteNote = asyncHandler(async (req, res) => {
     const isDeleted = await Note.findByIdAndDelete(req.params.id)
 
     if (!isDeleted) {
-        return res.status(400).json({ message: `Note with id ${id} does not exist!` })
+        return res.status(400).json({ message: `Note with id ${req.params.id} does not exist!` })
     }
 
     res.status(204).json({ message: 'Note has been deleted successfully!' })
