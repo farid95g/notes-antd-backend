@@ -8,8 +8,27 @@ const asyncHandler = require('express-async-handler')
  * @access Public
  */
 const getAllNotes = asyncHandler(async (req, res) => {
-    const notes = await Note.find().lean()
-    return res.json(notes)
+    const { page = 1, limit = 10 } = req.query
+
+    const [{ notes, total: [{ total }] }] = await Note.aggregate([{
+        $facet: {
+            notes: [
+                { $match: {} },
+                { $skip: (parseInt(page) - 1) * parseInt(limit) },
+                { $limit: parseInt(limit) }
+            ],
+            total: [
+                { $match: {} },
+                { $count: 'total' }
+            ]
+        }
+    }])
+
+    return res.json({
+        data: notes,
+        total,
+        currentPage: parseInt(page)
+    })
 })
 
 
@@ -40,7 +59,7 @@ const createNewNote = asyncHandler(async (req, res) => {
  * @route GET /api/notes/:id
  * @access Public
  */
- const getNote = asyncHandler(async (req, res) => {
+const getNote = asyncHandler(async (req, res) => {
     const note = await Note.findById(req.params.id).lean().exec()
 
     if (!note) {
